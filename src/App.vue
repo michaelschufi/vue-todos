@@ -1,31 +1,74 @@
+
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+  <v-app id="inspire">
+    <v-navigation-drawer
+      fixed
+      :clipped="$vuetify.breakpoint.lgAndUp"
+      app
+      v-model="drawer"
+    >
+    </v-navigation-drawer>
+    <v-toolbar
+      color="blue darken-3"
+      dark
+      app
+      :clipped-left="$vuetify.breakpoint.lgAndUp"
+      fixed
+    >
+      <v-toolbar-title class="toolbar-title ml-0 pl-3">
+        <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+        <span class="hidden-sm-and-down">{{ title }}</span>
+      </v-toolbar-title>
+      <v-text-field
+        flat
+        solo-inverted
+        prepend-icon="search"
+        label="Search"
+        class="hidden-sm-and-down"
+      ></v-text-field>
+      <v-spacer></v-spacer>
+      <v-btn icon large>
+        <v-avatar size="32px" tile>
+          <img
+            src="https://vuetifyjs.com/static/doc-images/logo.svg"
+            alt="Vuetify"
+          >
+        </v-avatar>
+      </v-btn>
+    </v-toolbar>
+    <v-content fluid>
+      <router-view></router-view>
+    </v-content>
+    <v-btn
+      fab
+      bottom
+      right
+      color="pink"
+      dark
+      fixed
+      @click.stop="dialog = !dialog"
+    >
+      <v-icon>add</v-icon>
+    </v-btn>
+  </v-app>
 </template>
 
-<style>
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-#nav {
-  padding: 30px;
-}
+<script>
+export default {
+  data() {
+    return {
+      title: this.$route.name,
+      dialog: false,
+      drawer: null
+    };
+  }
+};
+</script>
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
+<style scoped>
+.toolbar-title {
+  width: 300px;
+  display: flex;
+  align-items: center;
 }
 </style>
