@@ -52,12 +52,13 @@ export default {
     };
   },
   methods: {
-    addTodo: function(event) {
-      event.preventDefault();
-      this.$store.commit("addTodo", {
-        title: this.$data.title
+    addTodo: function() {
+      this.$store.dispatch("addTodo", {
+        title: this.$data.title,
+        done: false,
+        description: this.$data.description
       });
-      this.$router.go("/");
+      this.$router.push("/");
     }
   }
 };
