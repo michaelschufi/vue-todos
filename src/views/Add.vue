@@ -1,7 +1,7 @@
 <template>
-  <form v-on:submit="addTodo">
+  <form @submit.prevent="addTodo">
     <v-container grid-list-sm class="pa-4">
-      <v-text-field class="title" v-model="title" name="title" label="Title" required></v-text-field>
+      <v-text-field class="title" v-model="title" name="title" label="Title"></v-text-field>
 
       <v-text-field label="Description" v-model="description" name="description" multi-line rows="1" auto-grow></v-text-field>
 

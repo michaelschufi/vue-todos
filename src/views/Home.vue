@@ -1,7 +1,9 @@
 <template>
   <div class="home">
-    <img src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <v-subheader>Active ({{ activeTodos.length }})</v-subheader>
+    <TodoList :todos="activeTodos"></TodoList>
+    <v-subheader>Completed ({{ doneTodos.length }})</v-subheader>
+    <TodoList :todos="doneTodos"></TodoList>
     <router-link to="/add">
       <v-btn fab bottom right color="pink" dark fixed>
         <v-icon>add</v-icon>
@@ -12,12 +14,19 @@
 
 <script>
 // @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
+import TodoList from "@/components/TodoList.vue";
 
 export default {
-  name: "home",
   components: {
-    HelloWorld
+    TodoList
+  },
+  computed: {
+    activeTodos() {
+      return this.$store.getters.activeTodos;
+    },
+    doneTodos() {
+      return this.$store.getters.doneTodos;
+    }
   }
 };
 </script>
