@@ -28,8 +28,8 @@
         </v-time-picker>
       </v-dialog>
 
-      <v-btn flat color="primary" @click="dialog = false">Cancel</v-btn>
-      <v-btn flat @click="dialog = false" type="submit">Save</v-btn>
+      <v-btn flat color="primary" @click="back()">Cancel</v-btn>
+      <v-btn flat type="submit">Save</v-btn>
     </v-container>
   </form>
 </template>
@@ -48,7 +48,8 @@ export default {
       date: null,
       dateModal: false,
       time: null,
-      timeModal: false
+      timeModal: false,
+      previousRoute: null
     };
   },
   methods: {
@@ -58,8 +59,16 @@ export default {
         done: false,
         description: this.$data.description
       });
-      this.$router.push("/");
+      this.back();
+    },
+    back() {
+      this.$router.push(this.$data.previousRoute.fullPath);
     }
+  },
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      vm.$data.previousRoute = from;
+    });
   }
 };
 </script>
