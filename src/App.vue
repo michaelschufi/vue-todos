@@ -9,6 +9,9 @@
       </v-toolbar-title>
       <v-text-field flat solo-inverted prepend-icon="search" label="Search"></v-text-field>
       <v-spacer class="hidden-sm-and-down"></v-spacer>
+      <v-btn @click="loadTodos" icon large>
+        <v-icon>sync</v-icon>
+      </v-btn>
       <v-btn icon large>
         <v-avatar size="32px" tile>
           <img src="https://vuetifyjs.com/static/doc-images/logo.svg" alt="Vuetify">
@@ -23,20 +26,29 @@
 
 <script>
 export default {
-  data() {
-    return {
-      title: this.$route.name,
-      dialog: false,
-      drawer: null
-    };
-  }
+    data() {
+        return {
+            dialog: false,
+            drawer: null
+        };
+    },
+    computed: {
+      title() {
+        return this.$route.name;
+      },
+    },
+    methods: {
+        loadTodos() {
+            this.$store.dispatch('loadTodos');
+        }
+    }
 };
 </script>
 
 <style scoped>
 .toolbar-title {
-  width: 300px;
-  display: flex;
-  align-items: center;
+    width: 300px;
+    display: flex;
+    align-items: center;
 }
 </style>
