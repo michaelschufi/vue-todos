@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home" v-hotkey="keymap">
     <v-subheader>Active ({{ activeTodos.length }})</v-subheader>
     <TodoList :todos="activeTodos"></TodoList>
     <v-subheader>Completed ({{ doneTodos.length }})</v-subheader>
@@ -20,7 +20,20 @@ export default {
   components: {
     TodoList
   },
+  methods: {
+    goToAdd() {
+      this.$router.push("/add");
+    }
+  },
   computed: {
+    keymap() {
+      return {
+        a: {
+          keydown: () => {},
+          keyup: this.goToAdd
+        }
+      };
+    },
     activeTodos() {
       return this.$store.getters.activeTodos;
     },

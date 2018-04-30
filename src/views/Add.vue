@@ -1,7 +1,7 @@
 <template>
-  <form @submit.prevent="addTodo">
+  <form @submit.prevent="addTodo" v-hotkey="keymap">
     <v-container grid-list-sm class="pa-4">
-      <v-text-field class="title" v-model="title" name="title" label="Title"></v-text-field>
+      <v-text-field class="title" v-model="title" name="title" label="Title" autofocus></v-text-field>
 
       <v-text-field label="Description" v-model="description" name="description" multi-line rows="1" auto-grow></v-text-field>
 
@@ -49,8 +49,15 @@ export default {
       dateModal: false,
       time: null,
       timeModal: false,
-      previousRoute: null
+      previousRoute: "/"
     };
+  },
+  computed: {
+    keymap() {
+      return {
+        esc: this.back
+      };
+    }
   },
   methods: {
     addTodo: function() {

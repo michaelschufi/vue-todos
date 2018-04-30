@@ -19,17 +19,17 @@
 
 <script>
 export default {
-    name: 'TodoList',
-    props: {
-        todos: Array
+  name: "TodoList",
+  props: {
+    todos: Array
+  },
+  methods: {
+    setDone(index, done) {
+      this.$store.commit("setTodoDone", { index, done });
     },
-    methods: {
-        setDone(index, done) {
-            this.$store.commit('setTodoDone', { index, done });
-        },
-        remove(index) {
-            this.$store.dispatch('removeTodo', index);
-        }
+    remove(index) {
+      this.$store.dispatch("removeTodo", index);
     }
+  }
 };
 </script>

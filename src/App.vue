@@ -26,29 +26,32 @@
 
 <script>
 export default {
-    data() {
-        return {
-            dialog: false,
-            drawer: null
-        };
-    },
-    computed: {
-      title() {
-        return this.$route.name;
-      },
-    },
-    methods: {
-        loadTodos() {
-            this.$store.dispatch('loadTodos');
-        }
+  created() {
+    this.loadTodos();
+  },
+  data() {
+    return {
+      dialog: false,
+      drawer: null
+    };
+  },
+  computed: {
+    title() {
+      return this.$route.name;
     }
+  },
+  methods: {
+    loadTodos() {
+      this.$store.dispatch("loadTodos");
+    }
+  }
 };
 </script>
 
 <style scoped>
 .toolbar-title {
-    width: 300px;
-    display: flex;
-    align-items: center;
+  width: 300px;
+  display: flex;
+  align-items: center;
 }
 </style>
