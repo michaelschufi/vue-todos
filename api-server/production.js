@@ -1,9 +1,24 @@
-// production.js
-var deployd = require("deployd");
+// hello-server-attach.js
+var PORT = process.env.PORT || 2403;
+var ENV = process.env.NODE_ENV || "development";
 
-var server = deployd({
-  port: process.env.PORT || 2403,
-  env: "dev",
+// setup http + express + socket.io
+var fs = require("fs");
+var express = require("express");
+var app = express();
+
+var privateKey = fs.readFileSync("./privkey.pem", "utf8");
+var certificate = fs.readFileSync("./cert.pem", "utf8");
+
+var credentials = { key: privateKey, cert: certificate };
+
+var server = require("https").createServer(credentials, app);
+var io = require("socket.io").listen(server, { "log level": 0 });
+
+// setup deployd
+require("deployd").attach(server, {
+  socketIo: io, // if not provided, attach will create one for you.
+  env: ENV,
   db: {
     host: "localhost",
     port: 27017,
@@ -15,16 +30,8 @@ var server = deployd({
   }
 });
 
-server.listen();
+// After attach, express can use server.handleRequest as middleware
+app.use(server.handleRequest);
 
-server.on("listening", function() {
-  console.log("Server is listening");
-});
-
-server.on("error", function(err) {
-  console.error(err);
-  process.nextTick(function() {
-    // Give the server a chance to return an error
-    process.exit();
-  });
-});
+// start server
+server.listen(PORT);
