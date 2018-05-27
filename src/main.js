@@ -7,15 +7,14 @@ import "./registerServiceWorker";
 
 import Vuetify from "vuetify";
 import "vuetify/dist/vuetify.min.css";
-import VueHotkey from "v-hotkey";
+import VueShortkey from "vue-shortkey";
 
 import App from "./App.vue";
 
 Vue.config.productionTip = false;
 
 Vue.use(Vuetify);
-Vue.use(VueHotkey);
-
+Vue.use(VueShortkey, { prevent: ["input", "textarea", ".disablehotkeys"] });
 sync(store, router);
 
 new Vue({

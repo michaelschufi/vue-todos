@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="addTodo" v-hotkey="keymap">
+  <form @submit.prevent="addTodo" v-shortkey="['esc']" @shortkey="back()">
     <v-container grid-list-sm class="pa-4">
       <v-text-field class="title" v-model="title" name="title" label="Title" autofocus></v-text-field>
 
@@ -11,22 +11,26 @@
 
       <v-text-field label="Esimated Time (h)" hint="#:## / #.#" v-model="estimatedTime" prepend-icon="timelapse"></v-text-field>
 
-      <v-dialog ref="dateDialog" persistent v-model="dateModal" lazy width="290px" :return-value.sync="date" @click="dateModal = false">
+      <v-layout row>
         <v-text-field slot="activator" label="Deadline" v-model="date" prepend-icon="timer" hint="YYYY-mm-dd"></v-text-field>
-        <v-date-picker v-model="date" scrollable @input="$refs.dateDialog.save(date)">
-          <v-spacer></v-spacer>
-          <v-btn flat color="primary" @click="dateModal = false">Cancel</v-btn>
-          <v-btn flat color="primary" @click="$refs.dateDialog.save(date)">OK</v-btn>
-        </v-date-picker>
-      </v-dialog>
-      <v-dialog ref="timeDialog" persistent v-model="timeModal" lazy width="290px" :return-value.sync="time" @click="timeModal = false">
-        <v-text-field slot="activator" label="Time" v-model="time" hint="hh:mm"></v-text-field>
-        <v-time-picker v-model="time" scrollable>
-          <v-spacer></v-spacer>
-          <v-btn flat color="primary" @click="timeModal = false">Cancel</v-btn>
-          <v-btn flat color="primary" @click="$refs.timeDialog.save(time)">OK</v-btn>
-        </v-time-picker>
-      </v-dialog>
+        <v-text-field slot="activator" label="Time" v-model="time" hint="hh:mm" class="ml-3"></v-text-field>
+
+        <v-dialog ref="dateDialog" persistent v-model="dateModal" lazy width="290px" :return-value.sync="date" @click="dateModal = false">
+          <v-date-picker v-model="date" scrollable @input="$refs.dateDialog.save(date)">
+            <v-spacer></v-spacer>
+            <v-btn flat color="primary" @click="dateModal = false">Cancel</v-btn>
+            <v-btn flat color="primary" @click="$refs.dateDialog.save(date)">OK</v-btn>
+          </v-date-picker>
+        </v-dialog>
+
+        <v-dialog ref="timeDialog" persistent v-model="timeModal" lazy width="290px" :return-value.sync="time" @click="timeModal = false">
+          <v-time-picker v-model="time" scrollable>
+            <v-spacer></v-spacer>
+            <v-btn flat color="primary" @click="timeModal = false">Cancel</v-btn>
+            <v-btn flat color="primary" @click="$refs.timeDialog.save(time)">OK</v-btn>
+          </v-time-picker>
+        </v-dialog>
+      </v-layout>
 
       <v-btn flat color="primary" @click="back()">Cancel</v-btn>
       <v-btn flat type="submit">Save</v-btn>
@@ -51,13 +55,6 @@ export default {
       timeModal: false,
       previousRoute: "/"
     };
-  },
-  computed: {
-    keymap() {
-      return {
-        esc: this.back
-      };
-    }
   },
   methods: {
     addTodo: function() {
