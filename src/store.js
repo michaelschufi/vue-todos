@@ -5,7 +5,7 @@ import Axios from "axios";
 Vue.use(Vuex);
 
 const axios = Axios.create({
-  baseURL: "http://example.com:2403/",
+  baseURL: "https://example.com:2403/",
   // baseURL: "http://localhost:2403/",
   timeout: 3000
 });
@@ -13,7 +13,7 @@ const axios = Axios.create({
 export default new Vuex.Store({
   state: {
     todos: [],
-    currentTodo: null
+    requestQueue: [],
   },
   getters: {
     activeTodos: state => {
@@ -35,6 +35,9 @@ export default new Vuex.Store({
     },
     removeTodo: (state, index) => {
       state.todos.splice(index, 1);
+    },
+    addToRequestQueue: (state, request) => {
+      state.requestQueue.push(request);
     }
   },
   actions: {
@@ -44,9 +47,18 @@ export default new Vuex.Store({
       });
     },
     addTodo({ commit }, todo) {
-      axios.post("/todos", todo).then(response => {
-        commit("addTodo", response.data);
-      });
+      axios
+        .post("/todos", todo)
+        .then(response => {
+          commit("addTodo", response.data);
+        })
+        .catch(() => {
+          commit("addTodo", todo);
+          commit("addToRequestQueue", {
+            url: "/todos",
+            data: todo
+          });
+        });
     },
     removeTodo({ commit, state }, index) {
       const todo = state.todos[index];
