@@ -65,7 +65,7 @@ export default {
         description: this.$data.description,
         done: false
       });
-      // this.back();
+      this.back();
     },
     back() {
       this.$router.push(this.$data.previousRoute.fullPath);
