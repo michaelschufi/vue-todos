@@ -1,6 +1,7 @@
 <template>
   <div>
     <Subtask v-for="subtask in subtasks" :key="subtask.id" :subtask="subtask" />
+    <Subtask :todoId="todoId" :subtask="null" />
   </div>
 </template>
 

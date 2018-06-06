@@ -1,11 +1,12 @@
 <template>
   <div>
     <v-layout row class="row" justify-start>
-          <v-checkbox class="checkbox mr-4" hide-details v-model="subtask.done" v-on:change="setDone(todo.id, todo.done)"></v-checkbox>
+          <v-checkbox v-if="subtaskCopy.id" class="checkbox mr-4" hide-details v-model="subtaskCopy.done" v-on:change="setDone(subtaskCopy.id, subtaskCopy.done)"></v-checkbox>
+          <v-icon class="mr-4" v-if="!subtaskCopy.id">add</v-icon>
           <v-flex grow>
-            <v-text-field class="no-padding" placeholder="Title" hide-details v-model="subtask.title"></v-text-field>
+            <v-text-field class="no-padding" :placeholder="placeholder" hide-details v-model="subtaskCopy.title"></v-text-field>
           </v-flex>
-          <v-btn icon @click.stop="remove(todo.id)">
+          <v-btn icon @click.stop="remove(subtaskCopy.id)">
             <v-icon>delete</v-icon>
           </v-btn>
         </v-layout>
@@ -15,10 +16,18 @@
 <script>
 export default {
   props: {
+    todoId: String,
     subtask: Object
   },
   data() {
-    return {};
+    return {
+      subtaskCopy: Object.assign({}, this.subtask),
+    }
+  },
+  computed: {
+    placeholder() {
+      return this.$data.subtaskCopy.id ? "Title" : "New Subtask";
+    }
   }
 };
 </script>
