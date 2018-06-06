@@ -1,14 +1,14 @@
 <template>
   <v-expansion-panel inset>
-    <v-expansion-panel-content hide-actions v-for="(todo, index) in todos" :key="index" :class="getClass(index)" @input="setActive(index, $event)">
+    <v-expansion-panel-content hide-actions v-for="(todo, index) in todos" :key="todo.id" :class="getClass(index)" @input="setActive(index, $event)">
       <div slot="header">
         <v-layout row class="row" justify-start>
-          <v-checkbox class="checkbox mr-4" hide-details v-model="todo.done" @click.stop="null" v-on:change="setDone(index, todo.done)"></v-checkbox>
+          <v-checkbox class="checkbox mr-4" hide-details v-model="todo.done" v-on:change="setDone(todo.id, todo.done)"></v-checkbox>
           <v-flex grow>
-            <span class="subheading">{{ todo.title }}</span>
+            <span @click.stop @blur="updateTitle($event, todo.id)" :contenteditable="editable(index)" class="subheading">{{ todo.title }}</span>
             <span class="body-1 grey--text grey--darken-2" v-if="activePanel != index"><br>{{ todo.description }}</span>
           </v-flex>
-          <v-btn icon @click="remove(index)">
+          <v-btn icon @click.stop="remove(todo.id)">
             <v-icon>delete</v-icon>
           </v-btn>
         </v-layout>
@@ -31,15 +31,29 @@ export default {
   },
   data() {
     return {
-      activePanel: null
+      activePanel: null,
+      currentTitle: null
     };
   },
   methods: {
-    setDone(index, done) {
-      this.$store.commit("setTodoDone", { index, done });
+    editable(index) {
+      return this.$data.activePanel === index;
     },
-    remove(index) {
-      this.$store.dispatch("removeTodo", index);
+    updateTitle(event, id) {
+      let title = event.target.innerText;
+      this.$store.dispatch("updateTodo", {
+        id,
+        title
+      });
+    },
+    setDone(id, done) {
+      this.$store.dispatch("updateTodo", {
+        id: id,
+        done: done
+      });
+    },
+    remove(id) {
+      this.$store.dispatch("removeTodo", id);
     },
     setEditing(editing) {
       this.$store.commit("setEditing", editing);
@@ -67,7 +81,7 @@ export default {
 }
 
 .expansion-panel__header {
-  padding: 12px;
+  padding: 12px !important;
   height: 48px;
 }
 

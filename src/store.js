@@ -13,9 +13,12 @@ const axios = Axios.create({
 export default new Vuex.Store({
   state: {
     todos: [],
-    requestQueue: [],
+    requestQueue: []
   },
   getters: {
+    todo: state => id => {
+      return state.todo.find(todo => todo.id === id);
+    },
     activeTodos: state => {
       return state.todos.filter(todo => !todo.done);
     },
@@ -30,11 +33,15 @@ export default new Vuex.Store({
     addTodo: (state, todo) => {
       state.todos.push(todo);
     },
-    setTodoDone: (state, payload) => {
-      state.todos[payload.index].done = payload.done;
+    updateTodo: (state, newTodo) => {
+      let index = state.todos.findIndex(todo => todo.id === newTodo.id);
+      Vue.set(state.todos, index, newTodo);
     },
-    removeTodo: (state, index) => {
-      state.todos.splice(index, 1);
+    setTodoDone: (state, payload) => {
+      state.todos.find(todo => todo.id === payload.id).done = payload.done;
+    },
+    removeTodo: (state, id) => {
+      state.todos = state.todos.filter(todo => todo.id != id);
     },
     addToRequestQueue: (state, request) => {
       state.requestQueue.push(request);
@@ -60,10 +67,23 @@ export default new Vuex.Store({
           });
         });
     },
-    removeTodo({ commit, state }, index) {
-      const todo = state.todos[index];
-      axios.delete("/todos/" + todo.id).then(() => {
-        commit("removeTodo", index);
+    updateTodo({ commit }, newTodo) {
+      axios
+        .put("/todos/" + newTodo.id, newTodo)
+        .then(response => {
+          commit("updateTodo", response.data);
+        })
+        .catch(() => {
+          // commit("addTodo", todo);
+          // commit("addToRequestQueue", {
+          //   url: "/todos",
+          //   data: todo
+          // });
+        });
+    },
+    removeTodo({ commit }, id) {
+      axios.delete("/todos/" + id).then(() => {
+        commit("removeTodo", id);
       });
     }
   }

@@ -1,7 +1,6 @@
 <template>
-  <div class="disablehotkeys">
-    <span contenteditable class="disablehotkeys description subheading" @input="updateDescription($event)" @blur="saveTodo()" auto-grow multi-line hide-details rows="1">{{ todo.description }}</span>
-    <!-- <v-text-field class="description" auto-grow multi-line hide-details rows="1" v-model="todo.description"/> -->
+  <div v-shortkey.avoid class="disablehotkeys">
+    <span v-shortkey.avoid contenteditable class="disablehotkeys description subheading" @blur="updateDescription($event)">{{ todo.description }}</span>
   </div>
 </template>
 
@@ -13,15 +12,17 @@ export default {
   },
   data() {
     return {
-      updatedTodo: Object.assign({}, this.todo)
+      todoCopy: { id: this.todo.id }
     };
   },
   methods: {
     updateDescription(event) {
-      this.$data.updatedTodo.description = event.target.innerText;
+      let description = event.target.innerText;
+      this.$data.todoCopy.description = description;
+      this.saveTodo();
     },
     saveTodo() {
-      console.log(this.$data.updatedTodo);
+      this.$store.dispatch("updateTodo", this.$data.todoCopy);
     }
   }
 };
@@ -29,6 +30,9 @@ export default {
 
 <style scoped>
 .description {
+  display: inline-block;
+  min-width: 5em;
+  min-height: 1.5em;
   white-space: pre;
 }
 </style>
