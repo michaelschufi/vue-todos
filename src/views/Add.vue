@@ -60,9 +60,9 @@ export default {
     addTodo: function() {
       let subtasks = this.$data.subtasks.trim().split("\n");
       this.$store.dispatch("addTodo", {
-        title: this.$data.title,
+        title: this.$data.title.trim(),
         subtasks,
-        description: this.$data.description,
+        description: this.$data.description.trim(),
         done: false
       });
       this.back();
