@@ -45,7 +45,7 @@ export default {
     return {
       title: null,
       description: null,
-      subtasks: null,
+      subtasks: "",
       folders: [],
       folder: null,
       estimatedTime: null,
@@ -58,12 +58,14 @@ export default {
   },
   methods: {
     addTodo: function() {
+      let subtasks = this.$data.subtasks.split("\n");
       this.$store.dispatch("addTodo", {
         title: this.$data.title,
-        done: false,
-        description: this.$data.description
+        subtasks,
+        description: this.$data.description,
+        done: false
       });
-      this.back();
+      // this.back();
     },
     back() {
       this.$router.push(this.$data.previousRoute.fullPath);

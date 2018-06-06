@@ -9,7 +9,7 @@
       </v-toolbar-title>
       <v-text-field flat solo-inverted prepend-icon="search" label="Search"></v-text-field>
       <v-spacer class="hidden-sm-and-down"></v-spacer>
-      <v-btn @click="loadTodos" icon large>
+      <v-btn @click="init" icon large>
         <v-icon>sync</v-icon>
       </v-btn>
       <v-btn icon large>
@@ -27,7 +27,7 @@
 <script>
 export default {
   created() {
-    this.loadTodos();
+    this.init();
   },
   data() {
     return {
@@ -41,8 +41,9 @@ export default {
     }
   },
   methods: {
-    loadTodos() {
+    init() {
       this.$store.dispatch("loadTodos");
+      this.$store.dispatch("loadSubtasks");
     }
   }
 };

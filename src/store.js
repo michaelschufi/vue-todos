@@ -13,6 +13,7 @@ const axios = Axios.create({
 export default new Vuex.Store({
   state: {
     todos: [],
+    subtasks: [],
     requestQueue: []
   },
   getters: {
@@ -24,11 +25,17 @@ export default new Vuex.Store({
     },
     doneTodos: state => {
       return state.todos.filter(todo => todo.done);
+    },
+    subtasks: state => todoId => {
+      return state.subtasks.filter(subtask => subtask.todoId === todoId);
     }
   },
   mutations: {
     loadTodos: (state, todos) => {
       state.todos = todos;
+    },
+    loadSubtasks: (state, subtasks) => {
+      state.subtasks = subtasks;
     },
     addTodo: (state, todo) => {
       state.todos.push(todo);
@@ -43,6 +50,9 @@ export default new Vuex.Store({
     removeTodo: (state, id) => {
       state.todos = state.todos.filter(todo => todo.id != id);
     },
+    addSubtask: (state, subtask) => {
+      state.subtasks.push(subtask);
+    },
     addToRequestQueue: (state, request) => {
       state.requestQueue.push(request);
     }
@@ -53,11 +63,22 @@ export default new Vuex.Store({
         commit("loadTodos", response.data);
       });
     },
-    addTodo({ commit }, todo) {
+    loadSubtasks({ commit }) {
+      axios.get("/subtasks").then(response => {
+        commit("loadSubtasks", response.data);
+      });
+    },
+    addTodo({ commit, dispatch }, todo) {
       axios
         .post("/todos", todo)
         .then(response => {
           commit("addTodo", response.data);
+          todo.subtasks.forEach(title => {
+            dispatch("addSubtask", {
+              todoId: response.data.id,
+              title
+            });
+          });
         })
         .catch(() => {
           commit("addTodo", todo);
@@ -85,6 +106,20 @@ export default new Vuex.Store({
       axios.delete("/todos/" + id).then(() => {
         commit("removeTodo", id);
       });
+    },
+    addSubtask({ commit }, subtask) {
+      axios
+        .post("/subtasks", subtask)
+        .then(response => {
+          commit("addSubtask", response.data);
+        })
+        .catch(() => {
+          // commit("addTodo", todo);
+          // commit("addToRequestQueue", {
+          //   url: "/todos",
+          //   data: todo
+          // });
+        });
     }
   }
 });
