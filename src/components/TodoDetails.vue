@@ -1,7 +1,7 @@
 <template>
   <div v-shortkey.avoid class="disablehotkeys">
-    <span v-shortkey.avoid contenteditable class="disablehotkeys description subheading" @blur="updateDescription($event)">{{ todo.description }}</span>
-    <br><br>
+    <v-text-field placeholder="<no description>" class="pa-0" auto-grow rows="1" v-model="todoCopy.description" hide-details full-width textarea @blur="saveTodo()"></v-text-field>
+    <br>
     <h4>Subtasks</h4>
     <Subtasks :todoId="todo.id" />
   </div>
@@ -20,7 +20,7 @@ export default {
   },
   data() {
     return {
-      todoCopy: { id: this.todo.id }
+      todoCopy: Object.assign({}, this.todo)
     };
   },
   methods: {
@@ -31,6 +31,11 @@ export default {
     },
     saveTodo() {
       this.$store.dispatch("updateTodo", this.$data.todoCopy);
+    }
+  },
+  watch: {
+    todo() {
+      this.$data.todoCopy = Object.assign(this.todoCopy, this.todo)
     }
   }
 };
