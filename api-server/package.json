@@ -6,6 +6,7 @@
     "deployd": "^1.1.2",
     "dpd-clientlib": "^0.0.1",
     "dpd-dashboard": "^0.0.1",
-    "express": "^4.16.3"
+    "express": "^4.16.3",
+    "socket.io": "^2.1.1"
   }
 }
