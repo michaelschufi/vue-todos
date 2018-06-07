@@ -27,26 +27,26 @@
 <script>
 export default {
   created() {
-    this.init();
+    this.init()
   },
   data() {
     return {
       dialog: false,
-      drawer: null
-    };
+      drawer: null,
+    }
   },
   computed: {
     title() {
-      return this.$route.name;
-    }
+      return this.$route.name
+    },
   },
   methods: {
     init() {
-      this.$store.dispatch("loadTodos");
-      this.$store.dispatch("loadSubtasks");
-    }
-  }
-};
+      this.$store.dispatch('loadTodos')
+      this.$store.dispatch('loadSubtasks')
+    },
+  },
+}
 </script>
 
 <style scoped>

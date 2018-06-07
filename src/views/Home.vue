@@ -14,24 +14,24 @@
 
 <script>
 // @ is an alias to /src
-import TodoList from "@/components/TodoList.vue";
+import TodoList from '@/components/TodoList.vue'
 
 export default {
   components: {
-    TodoList
+    TodoList,
   },
   methods: {
     goToAdd() {
-      this.$router.push("/add");
-    }
+      this.$router.push('/add')
+    },
   },
   computed: {
     activeTodos() {
-      return this.$store.getters.activeTodos;
+      return this.$store.getters.activeTodos
     },
     doneTodos() {
-      return this.$store.getters.doneTodos;
-    }
-  }
-};
+      return this.$store.getters.doneTodos
+    },
+  },
+}
 </script>

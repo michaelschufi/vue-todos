@@ -1,7 +1,15 @@
 {
   "root": true,
-  "extends": [
-    "plugin:vue/essential",
-    "@vue/prettier"
-  ]
+  "extends": ["plugin:vue/essential", "@vue/airbnb"],
+  "rules": {
+    "no-param-reassign": "off",
+    "max-len": "off",
+    "semi": [1, "never"]
+  },
+  "env": {
+    "node": true
+  },
+  "parserOptions": {
+    "parser": "babel-eslint"
+  }
 }

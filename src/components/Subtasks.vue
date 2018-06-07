@@ -6,19 +6,19 @@
 </template>
 
 <script>
-import Subtask from "@/components/Subtask.vue";
+import Subtask from '@/components/Subtask.vue'
 
 export default {
   components: {
-    Subtask
+    Subtask,
   },
   props: {
-    todoId: String
+    todoId: String,
   },
   computed: {
     subtasks() {
-      return this.$store.getters.subtasks(this.todoId);
+      return this.$store.getters.subtasks(this.todoId)
     },
-  }
-};
+  },
+}
 </script>

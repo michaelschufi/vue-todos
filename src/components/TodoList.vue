@@ -21,57 +21,56 @@
 </template>
 
 <script>
-import TodoDetails from "@/components/TodoDetails.vue";
+import TodoDetails from '@/components/TodoDetails.vue'
 
 export default {
-  name: "TodoList",
+  name: 'TodoList',
   components: { TodoDetails },
   props: {
-    todos: Array
+    todos: Array,
   },
   data() {
     return {
       activePanel: null,
-      currentTitle: null
-    };
+      currentTitle: null,
+    }
   },
   methods: {
     editable(index) {
-      return this.$data.activePanel === index;
+      return this.$data.activePanel === index
     },
     updateTitle(event, id) {
-      let title = event.target.innerText;
-      this.$store.dispatch("updateTodo", {
+      const title = event.target.innerText
+      this.$store.dispatch('updateTodo', {
         id,
-        title
-      });
+        title,
+      })
     },
     setDone(id, done) {
-      this.$store.dispatch("updateTodo", {
-        id: id,
-        done: done
-      });
+      this.$store.dispatch('updateTodo', {
+        id,
+        done,
+      })
     },
     remove(id) {
-      this.$store.dispatch("removeTodo", id);
+      this.$store.dispatch('removeTodo', id)
     },
     setEditing(editing) {
-      this.$store.commit("setEditing", editing);
+      this.$store.commit('setEditing', editing)
     },
     setActive(index, active) {
-      this.$data.activePanel = active ? index : null;
+      this.$data.activePanel = active ? index : null
     },
     getClass(index) {
       if (index + 1 === this.$data.activePanel) {
-        return "prev pb-2";
+        return 'prev pb-2'
       } else if (index - 1 === this.$data.activePanel) {
-        return "next pt-2";
-      } else {
-        return "";
+        return 'next pt-2'
       }
-    }
-  }
-};
+      return ''
+    },
+  },
+}
 </script>
 
 <style>

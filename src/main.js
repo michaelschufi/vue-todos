@@ -1,24 +1,25 @@
-import Vue from "vue";
-import router from "./router";
-import store from "./store";
-import { sync } from "vuex-router-sync";
+import Vue from 'vue'
+import Vuetify from 'vuetify'
+import VueShortkey from 'vue-shortkey'
+import { sync } from 'vuex-router-sync'
 
-import "./registerServiceWorker";
+import 'vuetify/dist/vuetify.min.css'
 
-import Vuetify from "vuetify";
-import "vuetify/dist/vuetify.min.css";
-import VueShortkey from "vue-shortkey";
+import router from './router'
+import store from './store'
 
-import App from "./App.vue";
+import './registerServiceWorker'
 
-Vue.config.productionTip = false;
+import App from './App.vue'
 
-Vue.use(Vuetify);
-Vue.use(VueShortkey, { prevent: ["input", "textarea", ".disablehotkeys"] });
-sync(store, router);
+Vue.config.productionTip = false
+
+Vue.use(Vuetify)
+Vue.use(VueShortkey, { prevent: ['input', 'textarea', '.disablehotkeys'] })
+sync(store, router)
 
 new Vue({
   router,
   store,
-  render: h => h(App)
-}).$mount("#app");
+  render: h => h(App),
+}).$mount('#app')

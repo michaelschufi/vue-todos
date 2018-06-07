@@ -40,12 +40,12 @@
 
 <script>
 export default {
-  name: "add",
+  name: 'add',
   data() {
     return {
-      title: null,
-      description: null,
-      subtasks: "",
+      title: '',
+      description: '',
+      subtasks: '',
       folders: [],
       folder: null,
       estimatedTime: null,
@@ -53,28 +53,28 @@ export default {
       dateModal: false,
       time: null,
       timeModal: false,
-      previousRoute: "/"
-    };
+      previousRoute: '/',
+    }
   },
   methods: {
-    addTodo: function() {
-      let subtasks = this.$data.subtasks.trim().split("\n");
-      this.$store.dispatch("addTodo", {
+    addTodo() {
+      const subtasks = this.$data.subtasks.trim().split('\n')
+      this.$store.dispatch('addTodo', {
         title: this.$data.title.trim(),
         subtasks,
         description: this.$data.description.trim(),
-        done: false
-      });
-      this.back();
+        done: false,
+      })
+      this.back()
     },
     back() {
-      this.$router.push(this.$data.previousRoute.fullPath);
-    }
+      this.$router.push(this.$data.previousRoute.fullPath)
+    },
   },
   beforeRouteEnter(to, from, next) {
-    next(vm => {
-      vm.$data.previousRoute = from;
-    });
-  }
-};
+    next((vm) => {
+      vm.$data.previousRoute = from
+    })
+  },
+}
 </script>

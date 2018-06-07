@@ -8,37 +8,37 @@
 </template>
 
 <script>
-import Subtasks from "@/components/Subtasks.vue";
+import Subtasks from '@/components/Subtasks.vue'
 
 export default {
-  name: "TodoDetails",
+  name: 'TodoDetails',
   components: {
-    Subtasks
+    Subtasks,
   },
   props: {
-    todo: Object
+    todo: Object,
   },
   data() {
     return {
-      todoCopy: Object.assign({}, this.todo)
-    };
+      todoCopy: Object.assign({}, this.todo),
+    }
   },
   methods: {
     updateDescription(event) {
-      let description = event.target.innerText;
-      this.$data.todoCopy.description = description;
-      this.saveTodo();
+      const description = event.target.innerText
+      this.$data.todoCopy.description = description
+      this.saveTodo()
     },
     saveTodo() {
-      this.$store.dispatch("updateTodo", this.$data.todoCopy);
-    }
+      this.$store.dispatch('updateTodo', this.$data.todoCopy)
+    },
   },
   watch: {
     todo() {
       this.$data.todoCopy = Object.assign(this.todoCopy, this.todo)
-    }
-  }
-};
+    },
+  },
+}
 </script>
 
 <style scoped>
