@@ -1,7 +1,7 @@
 <template>
   <div>
-    <Subtask v-for="subtask in subtasks" :key="subtask.id" :subtask="subtask" />
-    <Subtask :todoId="todoId" :subtask="null" />
+    <Subtask v-for="subtask in subtasks" :key="subtask.todoId+subtask.id" :subtask="subtask" />
+    <Subtask :subtask="emptySubtask" />
   </div>
 </template>
 
@@ -9,6 +9,14 @@
 import Subtask from '@/components/Subtask.vue'
 
 export default {
+  name: 'Subtasks',
+  data() {
+    return {
+      emptySubtask: {
+        todoId: this.todoId,
+      },
+    }
+  },
   components: {
     Subtask,
   },

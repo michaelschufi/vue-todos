@@ -45,6 +45,13 @@ export default new Vuex.Store({
     addSubtask: (state, subtask) => {
       state.subtasks.push(subtask)
     },
+    updateSubtask: (state, newSubtask) => {
+      const index = state.subtasks.findIndex(subtask => subtask.id === newSubtask.id)
+      Vue.set(state.subtasks, index, newSubtask)
+    },
+    removeSubtask: (state, id) => {
+      state.subtasks = state.subtasks.filter(subtask => subtask.id !== id)
+    },
     addToRequestQueue: (state, request) => {
       state.requestQueue.push(request)
     },
@@ -112,6 +119,25 @@ export default new Vuex.Store({
           //   data: todo
           // });
         })
+    },
+    updateSubtask({ commit }, newSubtask) {
+      axios
+        .put(`/subtasks/${newSubtask.id}`, newSubtask)
+        .then((response) => {
+          commit('updateSubtask', response.data)
+        })
+        .catch(() => {
+          // commit("addSubtask", Subtask);
+          // commit("addToRequestQueue", {
+          //   url: "/subtasks",
+          //   data: subtask
+          // });
+        })
+    },
+    removeSubtask({ commit }, id) {
+      axios.delete(`/subtasks/${id}`).then(() => {
+        commit('removeSubtask', id)
+      })
     },
   },
 })

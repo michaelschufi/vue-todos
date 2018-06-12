@@ -5,7 +5,7 @@
         <v-layout row class="row" justify-start>
           <v-checkbox class="checkbox mr-4" hide-details v-model="todo.done" v-on:change="setDone(todo.id, todo.done)"></v-checkbox>
           <v-flex grow>
-            <span @click.stop @blur="updateTitle($event, todo.id)" :contenteditable="editable(index)" class="subheading">{{ todo.title }}</span>
+            <span @click.stop @blur="updateTitle($event, todo.id)" :contenteditable="editable(index)" class="disablehotkeys subheading" tabindex="1">{{ todo.title }}</span>
             <span class="body-1 grey--text grey--darken-2" v-if="activePanel != index"><br>{{ todo.description }}</span>
           </v-flex>
           <v-btn icon @click.stop="remove(todo.id)">

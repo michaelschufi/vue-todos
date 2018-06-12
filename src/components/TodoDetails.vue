@@ -1,6 +1,8 @@
 <template>
-  <div v-shortkey.avoid class="disablehotkeys">
-    <v-text-field placeholder="<no description>" class="pa-0" auto-grow rows="1" v-model="todoCopy.description" hide-details full-width textarea @blur="saveTodo()"></v-text-field>
+  <div>
+    <span v-shortkey.avoid contenteditable class="disablehotkeys description subheading" @input="updateDescription($event)" @blur="saveTodo()" tabindex="0">{{ todo.description || "no description" }}</span>
+    <!--<v-text-field v-shortkey.avoid :tabindex="todo.id" placeholder="<no description>" class="pa-0" auto-grow rows="1" v-model="todoCopy.description" hide-details full-width textarea @blur="saveTodo()"></v-text-field>-->
+    <br>
     <br>
     <h4>Subtasks</h4>
     <Subtasks :todoId="todo.id" />
@@ -27,7 +29,6 @@ export default {
     updateDescription(event) {
       const description = event.target.innerText
       this.$data.todoCopy.description = description
-      this.saveTodo()
     },
     saveTodo() {
       this.$store.dispatch('updateTodo', this.$data.todoCopy)

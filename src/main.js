@@ -15,7 +15,7 @@ import App from './App.vue'
 Vue.config.productionTip = false
 
 Vue.use(Vuetify)
-Vue.use(VueShortkey, { prevent: ['input', 'textarea', '.disablehotkeys'] })
+Vue.use(VueShortkey, { prevent: ['.disablehotkeys', '.disablehotkeys input, .disablehotkeys textarea'] })
 sync(store, router)
 
 new Vue({
