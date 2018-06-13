@@ -48,5 +48,6 @@ export default {
   min-width: 5em;
   min-height: 1.5em;
   white-space: pre;
+  width: 100%;
 }
 </style>
