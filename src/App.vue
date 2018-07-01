@@ -9,7 +9,7 @@
       </v-toolbar-title>
       <v-text-field flat solo-inverted prepend-icon="search" label="Search"></v-text-field>
       <v-spacer class="hidden-sm-and-down"></v-spacer>
-      <v-btn @click="sync" icon large>
+      <v-btn :class="{syncing: syncing}" @click="sync" icon large>
         <v-icon>sync</v-icon>
       </v-btn>
       <v-btn icon large>
@@ -39,6 +39,9 @@ export default {
     title() {
       return this.$route.name
     },
+    syncing() {
+      return this.$store.state.syncing
+    },
   },
   methods: {
     sync() {
@@ -49,9 +52,23 @@ export default {
 </script>
 
 <style scoped>
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(-360deg);
+  }
+}
+
 .toolbar-title {
   width: 300px;
   display: flex;
   align-items: center;
+}
+
+.syncing {
+  animation: 1.2s linear rotate infinite;
 }
 </style>

@@ -29,8 +29,9 @@ export default new Vuex.Store({
   },
   getters: {
     todo: state => id => state.todos.find(todo => todo.id === id),
-    activeTodos: state => state.todos.filter(todo => !todo.done),
-    doneTodos: state => state.todos.filter(todo => todo.done),
+    activeTodos: state =>
+      state.todos.filter(todo => !todo.done && !todo.removed),
+    doneTodos: state => state.todos.filter(todo => todo.done && !todo.removed),
     subtasks: state => todoId =>
       state.subtasks.filter(subtask => subtask.todoId === todoId),
   },
@@ -47,7 +48,9 @@ export default new Vuex.Store({
     },
     updateTodo: (state, payload) => {
       const index = state.todos.findIndex(todo => todo.id === payload.id)
-      Vue.set(state.todos, index, payload.todo)
+      const todo = state.todos[index]
+      const updatedTodo = Object.assign(todo, payload.todo)
+      Vue.set(state.todos, index, updatedTodo)
     },
     setTodoDone: (state, payload) => {
       state.todos.find(todo => todo.id === payload.id).done = payload.done
@@ -112,7 +115,11 @@ export default new Vuex.Store({
           axios
             .put(`/todos/${todo.id}`, todo)
             .then((response) => {
-              commit('updateTodo', { todo: response.data, id: todo.id })
+              const updatedTodo = Object.assign(
+                { dirty: false },
+                response.data,
+              )
+              commit('updateTodo', { todo: updatedTodo, id: todo.id })
               resolve(response)
             })
             .catch((error) => {
@@ -141,56 +148,62 @@ export default new Vuex.Store({
       return Promise.all(requests)
     },
     loadTodos({ commit, state, getters }) {
-      // get all todos from server
-      axios.get('/todos').then((response) => {
-        // remove deleted ones
-        const deletedTodos = state.todos.filter(localTodo =>
-          !response.data.find(serverTodo => serverTodo.id === localTodo.id))
-        deletedTodos.forEach((todo) => {
-          commit('removeTodo', todo.id)
-        })
+      return new Promise((resolve, reject) => {
+        // get all todos from server
+        axios
+          .get('/todos')
+          .then((response) => {
+            // remove deleted ones
+            const deletedTodos = state.todos.filter(localTodo =>
+              !response.data.find(serverTodo => serverTodo.id === localTodo.id))
+            deletedTodos.forEach((todo) => {
+              commit('removeTodo', todo.id)
+            })
 
-        // update existing ones
-        response.data.forEach((todo) => {
-          const localTodo = getters.todo(todo.id)
+            // update existing ones
+            response.data.forEach((todo) => {
+              const localTodo = getters.todo(todo.id)
 
-          // create new ones for the others
-          if (!localTodo) {
-            commit('addTodo', todo)
-          } else if (localTodo.modifiedAt < todo.modifiedAt) {
-            // update the ones which already exist
-            commit('updateTodo', { todo, id: todo.id })
-          }
-        })
+              // create new ones for the others
+              if (!localTodo) {
+                commit('addTodo', todo)
+              } else if (localTodo.modifiedAt < todo.modifiedAt) {
+                // update the ones which already exist
+                commit('updateTodo', { todo, id: todo.id })
+              }
+            })
+            resolve()
+          })
+          .catch(() => reject())
       })
     },
     sync({ commit, state, dispatch }) {
       if (!state.syncing) {
+        commit('setSyncing', true)
         commit('log', 'starting sync')
+        commit('log', 'sending new todos')
         dispatch('sendNewTodos')
           .then(() => {
             commit('log', 'sending updated todos')
-            dispatch('sendUpdatedTodos')
+            return dispatch('sendUpdatedTodos')
           })
           .then(() => {
             commit('log', 'sending deleted todos')
-            dispatch('sendDeletedTodos')
+            return dispatch('sendDeletedTodos')
           })
           .then(() => {
             commit('log', 'loading todos from server')
-            dispatch('loadTodos')
+            return dispatch('loadTodos')
           })
           .then(() => {
             commit('log', 'ended sync (then)')
+            commit('setSyncing', false)
           })
           .catch(() => {
             commit('log', 'ended sync (catch)')
+            commit('setSyncing', true)
           })
       }
-    },
-    addTodo({ commit, dispatch }, todo) {
-      commit('addTodo', todo)
-      dispatch('sync')
     },
     updateTodo({ commit }, newTodo) {
       axios.put(`/todos/${newTodo.id}`, newTodo).then((response) => {
