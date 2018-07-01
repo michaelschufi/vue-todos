@@ -10,11 +10,13 @@
   "dependencies": {
     "axios": "^0.18.0",
     "register-service-worker": "^1.0.0",
+    "shortid": "^2.2.8",
     "vue": "^2.5.13",
     "vue-router": "^3.0.1",
     "vue-shortkey": "^3.1.4",
     "vuetify": "^1.0.14",
     "vuex": "^3.0.1",
+    "vuex-persist": "^1.4.0",
     "vuex-router-sync": "^5.0.0"
   },
   "devDependencies": {
@@ -37,13 +39,16 @@
     "pre-commit": "lint-staged"
   },
   "lint-staged": {
-    "*.js": [
-      "vue-cli-service lint",
-      "git add"
-    ],
-    "*.vue": [
-      "vue-cli-service lint",
-      "git add"
-    ]
+    "linters": {
+      "*.js": [
+        "vue-cli-service lint",
+        "git add"
+      ],
+      "*.vue": [
+        "vue-cli-service lint",
+        "git add"
+      ]
+    },
+    "ignore": ["api-server/resources/**"]
   }
 }

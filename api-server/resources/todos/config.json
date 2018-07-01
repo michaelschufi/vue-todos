@@ -24,6 +24,22 @@
 			"required": false,
 			"id": "done",
 			"order": 2
+		},
+		"createdAt": {
+			"name": "createdAt",
+			"type": "date",
+			"typeLabel": "date",
+			"required": false,
+			"id": "createdAt",
+			"order": 3
+		},
+		"modifiedAt": {
+			"name": "modifiedAt",
+			"type": "date",
+			"typeLabel": "date",
+			"required": false,
+			"id": "modifiedAt",
+			"order": 4
 		}
 	}
 }
