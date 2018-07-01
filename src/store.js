@@ -9,6 +9,10 @@ Vue.use(Vuex)
 const vuexLocal = new VuexPersistence({
   storage: window.localStorage,
   strictMode: true,
+  reducer: state => ({
+    todos: state.todos,
+    subtasks: state.subtasks,
+  }),
 })
 
 export default new Vuex.Store({
@@ -18,7 +22,6 @@ export default new Vuex.Store({
     syncing: false,
     todos: [],
     subtasks: [],
-    requestQueue: [],
     log: '',
   },
   getters: {
@@ -190,12 +193,12 @@ export default new Vuex.Store({
             return dispatch('loadTodos')
           })
           .then(() => {
-            commit('log', 'ended sync (then)')
+            commit('log', 'ended sync (OK)')
             commit('setSyncing', false)
           })
           .catch(() => {
-            commit('log', 'ended sync (catch)')
-            commit('setSyncing', true)
+            commit('log', 'ended sync (FAIL)')
+            commit('setSyncing', false)
           })
       }
     },
