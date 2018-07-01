@@ -1,20 +1,14 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import VuexPersistence from 'vuex-persist'
-import Axios from 'axios'
 import shortid from 'shortid'
+import axios from './axios'
 
 Vue.use(Vuex)
 
 const vuexLocal = new VuexPersistence({
   storage: window.localStorage,
   strictMode: true,
-})
-
-const axios = Axios.create({
-  baseURL: 'https://example.com:2403/',
-  // baseURL: "http://localhost:2403/",
-  timeout: 3000,
 })
 
 export default new Vuex.Store({
