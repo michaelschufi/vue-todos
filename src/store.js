@@ -46,7 +46,7 @@ export default new Vuex.Store({
     updateTodo: (state, payload) => {
       const index = state.todos.findIndex(todo => todo.id === payload.id)
       const todo = state.todos[index]
-      const updatedTodo = Object.assign(todo, payload.todo)
+      const updatedTodo = Object.assign({}, todo, payload.todo)
       Vue.set(state.todos, index, updatedTodo)
     },
     setTodoDone: (state, payload) => {
@@ -120,7 +120,13 @@ export default new Vuex.Store({
               resolve(response)
             })
             .catch((error) => {
-              reject(error)
+              const errorData = error.response.data.errors['date does not match']
+              if (errorData) {
+                commit('updateTodo', { todo: errorData.currentTodo, id: errorData.currentTodo.id })
+                resolve('overwritten from server')
+              } else {
+                reject(error)
+              }
             })
         }))
       return Promise.all(requests)

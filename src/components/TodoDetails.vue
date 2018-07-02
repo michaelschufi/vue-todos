@@ -22,7 +22,7 @@ export default {
   },
   data() {
     return {
-      todoCopy: Object.assign({ dirty: true }, this.todo),
+      todoCopy: Object.assign({}, this.todo),
     }
   },
   methods: {
@@ -31,12 +31,14 @@ export default {
       this.$data.todoCopy.description = description
     },
     saveTodo() {
+      this.$data.todoCopy.dirty = true
       this.$store.commit('updateTodo', { todo: this.$data.todoCopy, id: this.$data.todoCopy.id })
+      this.$store.dispatch('sync')
     },
   },
   watch: {
     todo() {
-      this.$data.todoCopy = Object.assign(this.todoCopy, this.todo)
+      this.$data.todoCopy = Object.assign(this.$data.todoCopy, this.todo)
     },
   },
 }

@@ -49,6 +49,8 @@
         "git add"
       ]
     },
-    "ignore": ["api-server/resources/**"]
+    "ignore": [
+      "api-server/resources/**"
+    ]
   }
 }
