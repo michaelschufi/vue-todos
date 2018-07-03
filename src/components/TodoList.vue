@@ -2,16 +2,7 @@
   <v-expansion-panel inset>
     <v-expansion-panel-content hide-actions v-for="(todo, index) in todos" :key="todo.id" :class="getClass(index)" @input="setActive(index, $event)">
       <div slot="header">
-        <v-layout row class="row" justify-start>
-          <v-checkbox class="checkbox mr-4" hide-details v-model="todo.done" v-on:change="setDone(todo.id, todo.done)"></v-checkbox>
-          <v-flex grow>
-            <span @click.stop @blur="updateTitle($event, todo.id)" :contenteditable="editable(index)" class="subheading disablehotkeys">{{ todo.title }}</span>
-            <span class="body-1 grey--text grey--darken-2" v-if="activePanel != index"><br>{{ todo.description }}</span>
-          </v-flex>
-          <v-btn icon @click.stop="remove(todo.id)">
-            <v-icon>delete</v-icon>
-          </v-btn>
-        </v-layout>
+        <TodoListItemHeader :todo="todo" :isActive="isActive(index)" />
       </div>
       <div class="content pa-3">
         <TodoDetails :todo="todo" />
@@ -21,11 +12,12 @@
 </template>
 
 <script>
+import TodoListItemHeader from '@/components/TodoListItemHeader.vue'
 import TodoDetails from '@/components/TodoDetails.vue'
 
 export default {
   name: 'TodoList',
-  components: { TodoDetails },
+  components: { TodoListItemHeader, TodoDetails },
   props: {
     todos: Array,
   },
@@ -36,29 +28,13 @@ export default {
     }
   },
   methods: {
-    editable(index) {
+    isActive(index) {
       return this.$data.activePanel === index
-    },
-    updateTitle(event, id) {
-      const title = event.target.innerText
-      const todo = Object.assign({ dirty: true }, { title })
-      this.$store.commit('todos/updateTodo', {
-        todo,
-        id,
-      })
-      this.$store.dispatch('todos/sync')
     },
     setDone(id, done) {
       const todo = Object.assign({ dirty: true }, { done })
       this.$store.commit('todos/updateTodo', {
         todo,
-        id,
-      })
-      this.$store.dispatch('todos/sync')
-    },
-    remove(id) {
-      this.$store.commit('todos/updateTodo', {
-        todo: { removed: true },
         id,
       })
       this.$store.dispatch('todos/sync')
@@ -95,21 +71,5 @@ export default {
 
 .expansion-panel__container:last-child:not(.expansion-panel__container--active) {
   padding-bottom: 8px;
-}
-
-.show-newline {
-  white-space: pre;
-}
-</style>
-
-<style scoped>
-.row {
-  align-items: center;
-  overflow-x: hidden;
-}
-
-.checkbox {
-  flex: 0 1 auto;
-  width: auto;
 }
 </style>
