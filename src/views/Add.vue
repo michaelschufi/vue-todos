@@ -1,7 +1,7 @@
 <template>
   <form @submit.prevent="addTodo" v-shortkey="['esc']" @shortkey="back()">
     <v-container grid-list-sm class="pa-4">
-      <v-text-field class="title" v-model="title" name="title" label="Title" autofocus></v-text-field>
+      <v-text-field autocomplete="off" class="title" v-model="title" name="title" label="Title" autofocus></v-text-field>
 
       <v-text-field label="Description" v-model="description" name="description" multi-line rows="1" auto-grow></v-text-field>
 
