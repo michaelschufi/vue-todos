@@ -32,8 +32,8 @@ export default {
     },
     saveTodo() {
       this.$data.todoCopy.dirty = true
-      this.$store.commit('updateTodo', { todo: this.$data.todoCopy, id: this.$data.todoCopy.id })
-      this.$store.dispatch('sync')
+      this.$store.commit('todos/updateTodo', { todo: this.$data.todoCopy, id: this.$data.todoCopy.id })
+      this.$store.dispatch('todos/sync')
     },
   },
   watch: {

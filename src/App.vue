@@ -40,12 +40,12 @@ export default {
       return this.$route.name
     },
     syncing() {
-      return this.$store.state.syncing
+      return this.$store.state.todos.syncing
     },
   },
   methods: {
     sync() {
-      this.$store.dispatch('sync')
+      this.$store.dispatch('todos/sync')
     },
   },
 }

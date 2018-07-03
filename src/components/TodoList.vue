@@ -42,26 +42,26 @@ export default {
     updateTitle(event, id) {
       const title = event.target.innerText
       const todo = Object.assign({ dirty: true }, { title })
-      this.$store.commit('updateTodo', {
+      this.$store.commit('todos/updateTodo', {
         todo,
         id,
       })
-      this.$store.dispatch('sync')
+      this.$store.dispatch('todos/sync')
     },
     setDone(id, done) {
       const todo = Object.assign({ dirty: true }, { done })
-      this.$store.commit('updateTodo', {
+      this.$store.commit('todos/updateTodo', {
         todo,
         id,
       })
-      this.$store.dispatch('sync')
+      this.$store.dispatch('todos/sync')
     },
     remove(id) {
-      this.$store.commit('updateTodo', {
+      this.$store.commit('todos/updateTodo', {
         todo: { removed: true },
         id,
       })
-      this.$store.dispatch('sync')
+      this.$store.dispatch('todos/sync')
     },
     setActive(index, active) {
       this.$data.activePanel = active ? index : null

@@ -59,13 +59,13 @@ export default {
   methods: {
     addTodo() {
       const subtasks = this.$data.subtasks.trim().split('\n')
-      this.$store.commit('addTodo', {
+      this.$store.commit('todos/addTodo', {
         title: this.$data.title.trim(),
         subtasks,
         description: this.$data.description.trim(),
         done: false,
       })
-      this.$store.dispatch('sync')
+      this.$store.dispatch('todos/sync')
       this.back()
     },
     back() {

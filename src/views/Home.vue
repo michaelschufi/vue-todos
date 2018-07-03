@@ -27,10 +27,10 @@ export default {
   },
   computed: {
     activeTodos() {
-      return this.$store.getters.activeTodos
+      return this.$store.getters['todos/activeTodos']
     },
     doneTodos() {
-      return this.$store.getters.doneTodos
+      return this.$store.getters['todos/doneTodos']
     },
   },
 }
