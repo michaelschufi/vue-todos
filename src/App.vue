@@ -46,6 +46,7 @@ export default {
   methods: {
     sync() {
       this.$store.dispatch('todos/sync')
+      this.$store.dispatch('subtasks/sync')
     },
   },
 }

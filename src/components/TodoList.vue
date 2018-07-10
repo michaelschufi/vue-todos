@@ -33,7 +33,7 @@ export default {
     },
     setDone(id, done) {
       const todo = Object.assign({ dirty: true }, { done })
-      this.$store.commit('todos/updateTodo', {
+      this.$store.commit('todos/update', {
         todo,
         id,
       })

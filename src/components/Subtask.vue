@@ -1,16 +1,16 @@
 <template>
-  <div>
+  <form @submit.prevent="save()">
     <v-layout row class="row" justify-start>
       <v-checkbox v-if="id" class="checkbox mr-4" hide-details v-model="done" v-on:change="save()"></v-checkbox>
       <v-icon class="mr-4" v-if="!id">add</v-icon>
       <v-flex grow>
-        <v-text-field v-shortkey="['enter']" @shortkey.native="save()" tabindex="1" class="no-padding" :placeholder="placeholder" hide-details v-model="title"></v-text-field>
+        <v-text-field @change="save()" tabindex="1" class="disablehotkeys no-padding" :placeholder="placeholder" hide-details v-model="title"></v-text-field>
       </v-flex>
       <v-btn icon @click.stop="remove()">
         <v-icon>delete</v-icon>
       </v-btn>
     </v-layout>
-  </div>
+  </form>
 </template>
 
 <script>
@@ -24,6 +24,7 @@ export default {
       id: null,
       title: '',
       done: false,
+      removed: false,
     }, this.subtask)
   },
   computed: {
@@ -33,12 +34,20 @@ export default {
   },
   methods: {
     save() {
-      // console.log(this._uid)
       const subtask = this.$data
       if (subtask.id) {
-        this.$store.dispatch('updateSubtask', subtask)
+        this.$store.commit('subtasks/update', { subtask })
       } else {
-        this.$store.dispatch('addSubtask', subtask)
+        delete subtask.id
+        this.$store.commit('subtasks/add', subtask)
+        this.title = ''
+      }
+    },
+    remove() {
+      this.removed = true
+      const subtask = this.$data
+      if (this.id) {
+        this.$store.commit('subtasks/update', { subtask })
       }
     },
   },

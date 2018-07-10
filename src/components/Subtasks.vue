@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="lallalala" v-for="(subtask, index) in subtasks" :key="index">
-      <Subtask :subtask="subtask" />
+      <Subtask :key='subtask.id' :subtask="subtask" />
     </div>
     <Subtask :key="'empty'" :subtask="emptySubtask" />
   </div>
@@ -25,7 +25,7 @@ export default {
       }
     },
     subtasks() {
-      return this.$store.getters.subtasks(this.todoId)
+      return this.$store.getters['subtasks/byTodo'](this.todoId)
     },
   },
 }

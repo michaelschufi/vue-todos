@@ -9,30 +9,29 @@ const state = {
 
 const getters = {
   todo: state => id => state.todos.find(todo => todo.id === id),
-  activeTodos: state => state.todos.filter(todo => !todo.done && !todo.removed),
-  doneTodos: state => state.todos.filter(todo => todo.done && !todo.removed),
+  active: state => state.todos.filter(todo => !todo.done && !todo.removed),
+  done: state => state.todos.filter(todo => todo.done && !todo.removed),
 }
 
 const mutations = {
-  addTodo: (state, todo) => {
+  add: (state, todo) => {
+    const id = shortid.generate()
     const newTodo = Object.assign(
       {
-        id: shortid.generate(),
+        id,
       },
       todo,
     )
     state.todos.push(newTodo)
+    return id
   },
-  updateTodo: (state, payload) => {
+  update: (state, payload) => {
     const index = state.todos.findIndex(todo => todo.id === payload.id)
     const todo = state.todos[index]
     const updatedTodo = Object.assign({}, todo, payload.todo)
     Vue.set(state.todos, index, updatedTodo)
   },
-  setTodoDone: (state, payload) => {
-    state.todos.find(todo => todo.id === payload.id).done = payload.done
-  },
-  removeTodo: (state, id) => {
+  remove: (state, id) => {
     state.todos = state.todos.filter(todo => todo.id !== id)
   },
   log: (rootState, text) => {
@@ -43,7 +42,7 @@ const mutations = {
 }
 
 const actions = {
-  sendNewTodos({ commit, state }) {
+  sendNew({ commit, state }) {
     // get new todos
     const newTodos = state.todos.filter(todo => !todo.createdAt)
     // inform server about new todos
@@ -53,7 +52,7 @@ const actions = {
         axios
           .post('/todos', params)
           .then((response) => {
-            commit('updateTodo', { todo: response.data, id: todo.id })
+            commit('update', { todo: response.data, id: todo.id })
             resolve(response)
           })
           .catch((error) => {
@@ -62,7 +61,7 @@ const actions = {
       }))
     return Promise.all(requests)
   },
-  sendUpdatedTodos({ commit, state }) {
+  sendUpdated({ commit, state }) {
     // get updated todos
     const updatedTodos = state.todos.filter(todo => todo.dirty && !todo.removed)
 
@@ -73,15 +72,15 @@ const actions = {
           .put(`/todos/${todo.id}`, todo)
           .then((response) => {
             const updatedTodo = Object.assign({ dirty: false }, response.data)
-            commit('updateTodo', { todo: updatedTodo, id: todo.id })
+            commit('update', { todo: updatedTodo, id: todo.id })
             resolve(response)
           })
           .catch((error) => {
             const errorData = error.response.data.errors
             if (errorData && errorData['date does not match']) {
-              commit('updateTodo', {
-                todo: errorData.currentTodo,
-                id: errorData.currentTodo.id,
+              commit('update', {
+                todo: errorData.current,
+                id: errorData.current.id,
               })
               resolve('overwritten from server')
             } else {
@@ -91,7 +90,7 @@ const actions = {
       }))
     return Promise.all(requests)
   },
-  sendDeletedTodos({ commit, state }) {
+  sendDeleted({ commit, state }) {
     // get deleted todos
     const deletedTodos = state.todos.filter(todo => todo.removed)
 
@@ -101,7 +100,7 @@ const actions = {
         axios
           .delete(`/todos/${todo.id}`)
           .then((response) => {
-            commit('removeTodo', todo.id)
+            commit('remove', todo.id)
             resolve(response)
           })
           .catch((error) => {
@@ -110,7 +109,7 @@ const actions = {
       }))
     return Promise.all(requests)
   },
-  loadTodos({ commit, state, getters }) {
+  load({ commit, state, getters }) {
     return new Promise((resolve, reject) => {
       // get all todos from server
       axios
@@ -120,7 +119,7 @@ const actions = {
           const deletedTodos = state.todos.filter(localTodo =>
             !response.data.find(serverTodo => serverTodo.id === localTodo.id))
           deletedTodos.forEach((todo) => {
-            commit('removeTodo', todo.id)
+            commit('remove', todo.id)
           })
 
           // update existing ones
@@ -129,10 +128,10 @@ const actions = {
 
             // create new ones for the others
             if (!localTodo) {
-              commit('addTodo', todo)
+              commit('add', todo)
             } else if (localTodo.modifiedAt < todo.modifiedAt) {
               // update the ones which already exist
-              commit('updateTodo', { todo, id: todo.id })
+              commit('update', { todo, id: todo.id })
             }
           })
           resolve()
@@ -145,18 +144,18 @@ const actions = {
       commit('setSyncing', true, { root: true })
       commit('log', 'starting sync of todos')
       commit('log', 'sending new todos')
-      dispatch('sendNewTodos')
+      dispatch('sendNew')
         .then(() => {
           commit('log', 'sending updated todos')
-          return dispatch('sendUpdatedTodos')
+          return dispatch('sendUpdated')
         })
         .then(() => {
           commit('log', 'sending deleted todos')
-          return dispatch('sendDeletedTodos')
+          return dispatch('sendDeleted')
         })
         .then(() => {
           commit('log', 'loading todos from server')
-          return dispatch('loadTodos')
+          return dispatch('load')
         })
         .then(() => {
           commit('log', 'ended sync of todos (OK)')
