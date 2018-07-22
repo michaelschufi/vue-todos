@@ -55,21 +55,16 @@ export default {
 </script>
 
 <style>
-.expansion-panel__container:not(.expansion-panel__container--active) {
+.v-expansion-panel__container:not(.v-expansion-panel__container--active) {
   max-width: 100% !important;
   border: none !important;
 }
 
-.expansion-panel__header {
-  padding: 12px !important;
-  height: 48px;
-}
-
-.expansion-panel__container:first-child:not(.expansion-panel__container--active) {
+.v-expansion-panel__container:first-child:not(.v-expansion-panel__container--active) {
   padding-top: 8px;
 }
 
-.expansion-panel__container:last-child:not(.expansion-panel__container--active) {
+.v-expansion-panel__container:last-child:not(.v-expansion-panel__container--active) {
   padding-bottom: 8px;
 }
 </style>

@@ -3,9 +3,9 @@
     <v-container grid-list-sm class="pa-4">
       <v-text-field autocomplete="off" class="title" v-model="title" name="title" label="Title" autofocus></v-text-field>
 
-      <v-text-field label="Description" v-model="description" name="description" multi-line rows="1" auto-grow></v-text-field>
+      <v-textarea label="Description" v-model="description" name="description" rows="1" auto-grow></v-textarea>
 
-      <v-text-field v-model="subtasks" name="subtasks" label="Subtasks" multi-line rows="1" auto-grow prepend-icon="list"></v-text-field>
+      <v-textarea v-model="subtasks" name="subtasks" label="Subtasks" rows="1" auto-grow prepend-icon="list"></v-textarea>
 
       <v-select :items="folders" v-model="folder" label="Folder" prepend-icon="folder"></v-select>
 

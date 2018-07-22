@@ -1,11 +1,11 @@
 <template>
   <v-layout row class="row" justify-start>
-    <v-checkbox class="checkbox mr-4" hide-details v-model="todoCopy.done" v-on:change="saveTodo()"></v-checkbox>
+    <v-checkbox class="checkbox mr-3 my-0" hide-details v-model="todoCopy.done" v-on:change="saveTodo()"></v-checkbox>
     <v-flex grow>
       <span @click.stop @blur="updateTitle($event)" :contenteditable="isActive" class="subheading disablehotkeys">{{ todoCopy.title }}</span>
       <span class="body-1 grey--text grey--darken-2" v-if="!isActive"><br>{{ todoCopy.description }}</span>
     </v-flex>
-    <v-btn icon @click="removeTodo()">
+    <v-btn icon clickable @click="removeTodo()">
       <v-icon>delete</v-icon>
     </v-btn>
   </v-layout>
@@ -53,7 +53,6 @@ export default {
 <style scoped>
 .row {
   align-items: center;
-  overflow-x: hidden;
 }
 
 .checkbox {
