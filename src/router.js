@@ -14,13 +14,17 @@ export default new Router({
       path: '/',
       name: 'home',
       component: Home,
-      title: 'Home',
+      meta: {
+        title: 'Home',
+      },
     },
     {
       path: '/add',
       name: 'add',
       component: Add,
-      title: 'Add Todos',
+      meta: {
+        title: 'Add Todo',
+      },
     },
     {
       path: '/:folder',
