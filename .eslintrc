@@ -4,7 +4,8 @@
   "rules": {
     "no-param-reassign": "off",
     "max-len": "off",
-    "semi": [1, "never"]
+    "semi": [1, "never"],
+    "prefer-destructuring": "off"
   },
   "env": {
     "node": true
