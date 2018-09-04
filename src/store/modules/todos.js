@@ -11,6 +11,7 @@ const getters = {
   todo: state => id => state.todos.find(todo => todo.id === id),
   active: state => state.todos.filter(todo => !todo.done && !todo.removed),
   done: state => state.todos.filter(todo => todo.done && !todo.removed),
+  byFolder: state => folder => state.todos.filter(todo => todo.folder === folder),
 }
 
 const mutations = {

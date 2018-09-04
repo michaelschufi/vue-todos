@@ -8,7 +8,7 @@ import store from './store'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/',
@@ -30,11 +30,19 @@ export default new Router({
       path: '/:folder',
       component: Folder,
       name: 'folder',
-      beforeEnter: (to, from, next) => {
-        const currentFolder = constants.folders.find(folder => folder.value === to.params.folder)
-        store.commit('setPageTitle', currentFolder.text)
-        next()
-      },
     },
   ],
 })
+
+router.beforeEach((to, from, next) => {
+  let title = '?'
+  if (to.name === 'folder') {
+    title = constants.folders.find(folder => folder.value === to.params.folder).text
+  } else {
+    title = to.meta.title
+  }
+  store.commit('setPageTitle', title)
+  next()
+})
+
+export default router

@@ -43,7 +43,7 @@ export default {
   },
   computed: {
     title() {
-      return this.$route.meta.title || this.$store.state.pageTitle
+      return this.$store.state.pageTitle
     },
     syncing() {
       return this.$store.state.todos.syncing

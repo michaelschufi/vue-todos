@@ -1,9 +1,9 @@
 <template>
   <div class="home" v-shortkey="['a']" @shortkey="goToAdd()">
-    <v-subheader>Active ({{ activeTodos.length }})</v-subheader>
-    <TodoList :todos="activeTodos"></TodoList>
-    <v-subheader>Completed ({{ doneTodos.length }})</v-subheader>
-    <TodoList :todos="doneTodos"></TodoList>
+    <div v-for="(todoList, index) in todoLists" :key="index">
+      <v-subheader>{{ todoList.folder.text }} ({{ todoList.todos.length }})</v-subheader>
+      <TodoList :todos="todoList.todos"></TodoList>
+    </div>
     <router-link to="/add">
       <v-btn fab bottom right color="pink" dark fixed>
         <v-icon>add</v-icon>
@@ -15,6 +15,7 @@
 <script>
 // @ is an alias to /src
 import TodoList from '@/components/TodoList.vue'
+import constants from '@/constants'
 
 export default {
   components: {
@@ -26,11 +27,11 @@ export default {
     },
   },
   computed: {
-    activeTodos() {
-      return this.$store.getters['todos/active']
-    },
-    doneTodos() {
-      return this.$store.getters['todos/done']
+    todoLists() {
+      return constants.folders.map(folder => ({
+        folder,
+        todos: this.$store.getters['todos/byFolder'](folder.value),
+      }))
     },
   },
 }
