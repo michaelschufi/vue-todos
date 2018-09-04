@@ -46,14 +46,23 @@ export default {
       title: '',
       description: '',
       subtasks: '',
-      folders: [],
-      folder: null,
+      folders: [
+        { value: 'inbox', text: 'Inbox' },
+        { value: 'today', text: 'Today' },
+        { value: 'tomorrow', text: 'Tomorrow' },
+        { value: 'next', text: 'Next' },
+        { value: 'scheduled', text: 'Scheduled' },
+        { value: 'waiting', text: 'Waiting' },
+      ],
+      folder: 'inbox',
       estimatedTime: null,
       date: null,
       dateModal: false,
       time: null,
       timeModal: false,
-      previousRoute: '/',
+      previousRoute: {
+        fullPath: '/',
+      },
     }
   },
   methods: {
@@ -64,6 +73,7 @@ export default {
         subtasks,
         description: this.$data.description.trim(),
         done: false,
+        folder: this.$data.folder,
       })
       this.$store.dispatch('todos/sync')
       this.back()

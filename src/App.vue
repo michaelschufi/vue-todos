@@ -1,6 +1,7 @@
 <template>
   <v-app id="inspire">
     <v-navigation-drawer fixed :clipped="$vuetify.breakpoint.lgAndUp" app v-model="drawer">
+      <Menu></Menu>
     </v-navigation-drawer>
     <v-toolbar color="blue darken-3" dark app :clipped-left="$vuetify.breakpoint.lgAndUp" fixed>
       <v-toolbar-title class="toolbar-title ml-0 pl-3">
@@ -25,7 +26,12 @@
 </template>
 
 <script>
+import Menu from '@/components/Menu.vue'
+
 export default {
+  components: {
+    Menu,
+  },
   created() {
     this.sync()
   },
@@ -37,7 +43,7 @@ export default {
   },
   computed: {
     title() {
-      return this.$route.name
+      return this.$store.state.pageTitle
     },
     syncing() {
       return this.$store.state.todos.syncing

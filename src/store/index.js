@@ -20,6 +20,7 @@ export default new Vuex.Store({
   },
   plugins: [vuexLocal.plugin],
   state: {
+    pageTitle: '',
     syncing: false,
     subtasks: [],
     log: '',
@@ -29,6 +30,9 @@ export default new Vuex.Store({
     RESTORE_MUTATION: vuexLocal.RESTORE_MUTATION, // this mutation **MUST** be named "RESTORE_MUTATION"
     setSyncing: (state, val) => {
       state.syncing = val
+    },
+    setPageTitle: (state, title) => {
+      state.pageTitle = title
     },
   },
   actions: {},
