@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="lallalala" v-for="(subtask, index) in subtasks" :key="index">
+    <div v-for="(subtask, index) in subtasks" :key="index">
       <Subtask :key='subtask.id' :subtask="subtask" />
     </div>
     <Subtask :key="'empty'" :subtask="emptySubtask" />
